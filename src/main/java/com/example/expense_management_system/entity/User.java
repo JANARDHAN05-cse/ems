@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "users")
@@ -24,13 +25,18 @@ public class User {
     @Column(nullable=false)
     private String password;
 
-    // stored as text values like 'USER'
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id")
+    )
     @Column(name = "role")
-    private Set<String> roles;
+    @Builder.Default
+    private Set<String> roles = new HashSet<>();
 
+    @Builder.Default
     private boolean enabled = true;
 
+    @Builder.Default
     private boolean accountNonLocked = true;
 }
